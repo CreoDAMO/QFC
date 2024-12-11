@@ -89,6 +89,7 @@ transaction.py
 
 Handles transaction structure and cryptographic operations.
 
+```py
 import time
 import json
 import hashlib
@@ -152,11 +153,13 @@ class Transaction:
             return True
         except InvalidSignature:
             return False
+```
 
 block.py
 
 Defines block structure and mining logic.
 
+```py
 import json
 import hashlib
 import time
@@ -186,7 +189,7 @@ class Block:
         while not self.hash.startswith(target):
             self.nonce += 1
             self.hash = self.calculate_hash()
-
+```
 
 ---
 
@@ -236,6 +239,7 @@ This file will include:
 
 Code Implementation
 
+```py
 from typing import List, Dict, Optional
 from .block import Block
 from .transaction import Transaction
@@ -304,7 +308,7 @@ class Blockchain:
             print(f"Processed transaction with fee: {transaction.fee} QFC")
         else:
             print("Insufficient balance for transaction")
-
+```
 
 ---
 
@@ -314,6 +318,7 @@ shard.py
 
 Manages individual shard functionality like maintaining a local chain and pending transactions.
 
+```py
 import random
 from typing import List
 from pygame.math import Vector3
@@ -346,7 +351,7 @@ class Shard:
         )
         self.pending_transactions = []
         return new_block
-
+```
 
 ---
 
@@ -356,6 +361,7 @@ cross_shard_coordinator.py
 
 Handles shard interaction and cross-shard transactions.
 
+```py
 from typing import List
 from .shard import Shard
 from .transaction import Transaction
@@ -392,7 +398,7 @@ class CrossShardCoordinator:
     def abort_transaction(self, transaction: Transaction, source_shard: Shard, destination_shard: Shard) -> bool:
         # Implement abort logic
         return False
-
+```
 
 ---
 
@@ -438,6 +444,7 @@ Code Implementation
 
 consensus.py
 
+```py
 import time
 import hashlib
 import random
@@ -468,7 +475,7 @@ class GreenConsensus:
         reward = max(1, self.block_reward // (2 ** halvings))  # Halve rewards
         reward_transaction = Transaction("Network", miner_address, reward, "QFC")
         self.blockchain.add_transaction(reward_transaction)
-
+```
 
 ---
 
@@ -478,6 +485,7 @@ green_pow.py
 
 Handles eco-friendly mining logic and difficulty adjustments.
 
+```py
 class GreenProofOfWork:
     def __init__(self, initial_difficulty=4, target_block_time=60, adjustment_interval=10):
         self.difficulty = initial_difficulty
@@ -532,7 +540,7 @@ class GreenProofOfWork:
         }
         credits = base_credit * multiplier[energy_source]
         self.carbon_credits[miner_address] = self.carbon_credits.get(miner_address, 0) + credits
-
+```
 
 ---
 
@@ -542,6 +550,7 @@ carbon_market.py
 
 Supports trading of carbon credits earned during mining.
 
+```py
 class CarbonCreditMarket:
     def __init__(self):
         self.credit_price = 10  # Initial price per credit
@@ -571,7 +580,7 @@ class CarbonCreditMarket:
         elif sell_volume > buy_volume:
             self.credit_price *= 0.9  # Decrease price by 10%
         self.transactions = []  # Reset transactions after price adjustment
-
+```
 
 ---
 
@@ -623,6 +632,7 @@ Code Implementation
 
 nft_marketplace.py
 
+```py
 from typing import Dict, Any, List
 
 class NFTMarketplace:
@@ -709,7 +719,7 @@ class NFTMarketplace:
                 del self.nfts[token_id]["sale_price"]
                 return True
         return False
-
+```
 
 ---
 
@@ -833,6 +843,7 @@ Code Implementation
 
 dex.py
 
+```py
 from typing import List, Dict
 
 class DecentralizedExchange:
@@ -897,7 +908,7 @@ class DecentralizedExchange:
 
     def transfer_tokens(self, token_id: str, seller: str, buyer: str, amount: float):
         print(f"{amount} {token_id} tokens transferred from {seller} to {buyer}.")
-
+```
 
 ---
 
@@ -1031,6 +1042,7 @@ Code Implementation
 
 liquidity_pool.py
 
+```py
 from typing import Dict
 
 class LiquidityPool:
@@ -1109,7 +1121,7 @@ class LiquidityPool:
 
     def _get_pool_id(self, token_a: str, token_b: str) -> str:
         return f"{min(token_a, token_b)}-{max(token_a, token_b)}"
-
+```
 
 ---
 
@@ -1167,6 +1179,7 @@ Code Implementation
 
 api.py
 
+```py
 from flask import Flask, request, jsonify
 from blockchain.blockchain import Blockchain
 from features.nft_marketplace import NFTMarketplace
@@ -1240,7 +1253,7 @@ def swap():
 # Run API server
 if __name__ == '__main__':
     app.run(debug=True)
-
+```
 
 ---
 
@@ -1340,6 +1353,7 @@ Token Management
 
 File: auth.py
 
+```py
 import jwt
 import datetime
 from flask import request, jsonify
@@ -1369,7 +1383,7 @@ def token_required(f):
             return jsonify({"message": "Invalid token!"}), 401
         return f(*args, **kwargs)
     return wrapper
-
+```
 
 ---
 
@@ -1377,6 +1391,7 @@ Apply Authentication to API
 
 Modify api.py to secure endpoints.
 
+```py
 from auth import generate_token, token_required
 
 # Generate Token
@@ -1402,7 +1417,7 @@ def add_liquidity():
     data = request.json
     liquidity_pool.add_liquidity(data['user'], data['token_a'], data['token_b'], data['amount_a'], data['amount_b'])
     return jsonify({"success": True})
-
+```
 
 ---
 
@@ -1461,6 +1476,7 @@ Update Liquidity Pool
 
 Modify liquidity_pool.py to add analytics.
 
+```py
 class LiquidityPool:
     def __init__(self):
         self.pools = {}
@@ -1493,7 +1509,7 @@ class LiquidityPool:
             self.dynamic_fee_multiplier = min(2.0, self.dynamic_fee_multiplier + 0.1)
         else:
             self.dynamic_fee_multiplier = max(1.0, self.dynamic_fee_multiplier - 0.05)
-
+```
 
 ---
 
@@ -1585,6 +1601,7 @@ Unit Test for Token Generation and Validation
 
 File: test_auth.py
 
+```py
 import pytest
 import jwt
 from auth import generate_token, token_required, SECRET_KEY
@@ -1616,7 +1633,7 @@ def test_token_required(client):
     headers = {"Authorization": token}
     response = client.get("/balance/Alice", headers=headers)
     assert response.status_code == 200
-
+```
 
 ---
 
@@ -1626,6 +1643,7 @@ Unit Test for Pool Statistics
 
 File: test_liquidity_pool.py
 
+```py
 import pytest
 from features.liquidity_pool import LiquidityPool
 
@@ -1642,11 +1660,13 @@ def test_pool_stats(setup_liquidity_pool):
     assert stats["reserves"]["reserve_b"] == 200
     assert stats["total_liquidity"] == 300
     assert stats["liquidity_providers"]["Alice"] == 300
+```
 
 Integration Test for Analytics API
 
 File: test_api.py
 
+```py
 from flask import json
 
 def test_get_pool_stats(client):
@@ -1667,7 +1687,7 @@ def test_get_pool_stats(client):
     assert data["reserves"]["reserve_a"] == 100
     assert data["reserves"]["reserve_b"] == 200
     assert data["total_liquidity"] == 300
-
+```
 
 ---
 
@@ -1677,6 +1697,7 @@ Unit Test for Dynamic Fee Calculation
 
 File: test_liquidity_pool.py
 
+```py
 def test_dynamic_fee_adjustment(setup_liquidity_pool):
     pool = setup_liquidity_pool
 
@@ -1690,18 +1711,20 @@ def test_dynamic_fee_adjustment(setup_liquidity_pool):
     # Simulate low volatility
     pool.adjust_fee(volatility=0.05)
     assert pool.get_fee() <= 0.003
+```
 
 Integration Test for Fee Adjustment API
 
 File: test_api.py
 
+```py
 def test_adjust_fee(client):
     response = client.post('/lp/adjust_fee', json={"volatility": 0.15})
     assert response.status_code == 200
 
     data = response.get_json()
     assert data["message"] == "Fee adjusted successfully."
-
+```
 
 ---
 
@@ -1713,6 +1736,7 @@ Use Locust to test the scalability of liquidity and swap endpoints under heavy t
 
 File: locustfile.py
 
+```py
 from locust import HttpUser, task, between
 
 class LiquidityPoolUser(HttpUser):
@@ -1740,6 +1764,7 @@ class LiquidityPoolUser(HttpUser):
     @task
     def get_pool_stats(self):
         self.client.get("/lp/stats?token_a=TOKEN1&token_b=TOKEN2")
+```
 
 Run Locust with:
 
@@ -1907,6 +1932,7 @@ Blockchain Integration: Update QFC balances upon successful purchases.
 
 2. Implementation
 
+```py
 import requests
 import datetime
 from typing import Dict, List
@@ -1989,7 +2015,7 @@ class QFCOnRamper:
         # Placeholder for real KYC/AML integration
         # Example: Call an external API like Sumsub or Persona
         return True  # Assume KYC passed
-
+```
 
 ---
 
